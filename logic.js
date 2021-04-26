@@ -79,8 +79,9 @@ function prepare() {
                 }
                 break;
         }
+        });
     // android swipe listener
-    var start = null;
+    var startx,starty = null;
     window.addEventListener("touchstart",function(event){
     if(event.touches.length === 1){
         //just one finger touched
@@ -111,14 +112,14 @@ function prepare() {
     }
     if(starty){
       //the only finger that hit the screen left it
-      var endx = event.changedTouches.item(0).clientY;
+      var endy = event.changedTouches.item(0).clientY;
 
-      if(endx > starty + offset){
+      if(endy > starty + offset){
         if (pre_direction != 'u') {
         direction = 'd';
         }
       }
-      if(endx < starty - offset ){
+      if(endy < starty - offset ){
         if (pre_direction != 'd') {
         direction = 'u';
         }
@@ -126,7 +127,6 @@ function prepare() {
     }
 
     });
-        });
     main();
 }
 
