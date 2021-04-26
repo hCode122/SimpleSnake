@@ -162,6 +162,7 @@ function render() {
 function main() {
     if (sessionStorage.getItem('hscore') == null) {
         sessionStorage.setItem('hscore', 0);
+        highscore = sessionStorage.getItem('hscore');
     }
     else {
         highscore = sessionStorage.getItem('hscore');
