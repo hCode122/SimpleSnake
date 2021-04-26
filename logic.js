@@ -79,6 +79,53 @@ function prepare() {
                 }
                 break;
         }
+    // android swipe listener
+    var start = null;
+    window.addEventListener("touchstart",function(event){
+    if(event.touches.length === 1){
+        //just one finger touched
+    startx = event.touches.item(0).clientY;
+    starty = event.touches.item(0).clientY;
+    }else{
+    //a second finger hit the screen, abort the touch
+    startx,starty = null;
+        }
+    });
+
+    window.addEventListener("touchend",function(event){
+    var offset = 100;//at least 100px are a swipe
+    if(startx){
+      //the only finger that hit the screen left it
+      var endx = event.changedTouches.item(0).clientX;
+
+      if(endx > start + offset){
+        if (pre_direction != 'l') {
+        direction = 'r';
+        }
+      }
+      if(endx < start - offset ){
+        if (pre_direction != 'r') {
+        direction = 'l';
+        }
+      }
+    }
+    if(starty){
+      //the only finger that hit the screen left it
+      var endx = event.changedTouches.item(0).clientY;
+
+      if(endx > start + offset){
+        if (pre_direction != 'u') {
+        direction = 'd';
+        }
+      }
+      if(endx < start - offset ){
+        if (pre_direction != 'd') {
+        direction = 'u';
+        }
+      }
+    }
+
+    });
         });
     main();
 }
