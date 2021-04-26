@@ -1,0 +1,40 @@
+#field {
+    margin-right:300px;
+    margin-top: 10px;
+    border-style: solid;
+    float:right;
+}
+td {
+    border-style:solid;
+    border-color: black;
+    height: 50px;
+    width: 50px;
+}
+
+#score {
+    margin-top: 10px;
+    background-color: rgb(42, 38, 38);
+    border-radius: 20px;
+    width: 400px;
+    height: 300px;
+    float:left;
+}
+
+body {
+    background-color: white;
+}
+
+.info_box {
+    font-size: large;
+    float: right;
+    width: 40px;
+    height: 15px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+p {
+    margin-left: 30px;
+    color: rgb(255, 255, 255);
+    font-size: larger;
+}
