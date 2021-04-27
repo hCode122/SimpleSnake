@@ -98,7 +98,6 @@ function prepare() {
     if(startx){
       //the only finger that hit the screen left it
       var endx = event.changedTouches.item(0).clientX;
-      alert(startx+" " + endx);
       if(endx > startx + offset){
         if (pre_direction != 'l') {
         direction = 'r';
