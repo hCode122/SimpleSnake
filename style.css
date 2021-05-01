@@ -11,8 +11,8 @@
     margin-left: 35%;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
-    width: 30vw;
-    height: 21vh;
+    width: 35vw;
+    height: 20vh;
 }
 
 body {
@@ -21,7 +21,7 @@ body {
 }
 
 .info_box {
-    font-size: 2vh;
+    font-size: 1vh;
     float: right;
     width: 40%;
     height: 15%;
@@ -32,7 +32,7 @@ body {
 p {
     margin-left: 10%;
     color: rgb(255, 255, 255);
-    font-size: 2vh;
+    font-size: 1vh;
 }
 }
 /*------------------------------------------------------------*/
