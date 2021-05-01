@@ -1,7 +1,7 @@
 var canvas; 
 var canvas_context; 
-var first_part = {x:135, y:60}; 
-var second_part = {x:135, y:45}
+var first_part = {x:45, y:45}; 
+var second_part = {x:45, y:30}
 // snake's main body
 var snake = [first_part, second_part];
 // points to the snake's first element
@@ -29,12 +29,12 @@ function prepare() {
         switch (event.key) {
             case 'ArrowUp':
                 if (pre_direction != 'd') {
-                    event.preventDefault();
                     direction = 'u';
                 }
                 break;
             case 'ArrowDown':
                 if (pre_direction != 'u') {
+                    event.preventDefault();
                     direction = 'd';
                 }
                 break;
@@ -286,8 +286,8 @@ function quit() {
         pre_direction = '';
         speed = 300;
 
-        first_part = {x:135, y:60}; 
-        second_part = {x:135, y:45}
+        first_part = {x:45, y:45}; 
+        second_part = {x:45, y:30}
         snake = [first_part, second_part];
         head = snake[0];
         main();
