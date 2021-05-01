@@ -3,12 +3,12 @@
 /*------------------- Mobile Style --------------------------*/
 @media (max-width : 720px) {
 #canvas {
-    margin-left: 40%;
+    margin-left: 25%;
     border-style: solid;
 }
 #score {
     padding-top: 1%;
-    margin-left: 40%;
+    margin-left: 35%;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
     width: 30vw;
@@ -37,15 +37,15 @@ p {
 }
 /*------------------------------------------------------------*/
 /*------------------- Desktop Style --------------------------*/
-@media (max-width : 1228px) {
+@media (min-width : 720px) {
 #canvas {
-    margin-left: 37%;
+    margin-left: 25%;
     border-style: solid;
 }
 #score {
     float: right;
     padding-top: 1%;
-    margin-right: 29%;
+    margin-right: 32%;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
     width: 35vw;
@@ -58,7 +58,7 @@ body {
 }
 
 .info_box {
-    font-size: 1.5vh;
+    font-size: 3vh;
     float: right;
     width: 20%;
     height:30%;
@@ -69,6 +69,6 @@ body {
 p {
     margin-left: 10%;
     color: rgb(255, 255, 255);
-    font-size: 2vh;
+    font-size: 3vh;
 }
 }

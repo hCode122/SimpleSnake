@@ -29,6 +29,7 @@ function prepare() {
         switch (event.key) {
             case 'ArrowUp':
                 if (pre_direction != 'd') {
+                    event.preventDefault();
                     direction = 'u';
                 }
                 break;
@@ -55,6 +56,7 @@ function prepare() {
     var startx,starty = null;
     window.addEventListener("touchstart",function(event){
     if(event.touches.length === 1){
+        event.preventDefault();
         //just one finger touched
     startx = event.touches.item(0).clientX;
     starty = event.touches.item(0).clientY;
@@ -87,7 +89,6 @@ window.addEventListener("touchend",function(event){
       if(endy > starty + offset){
         if (pre_direction != 'u') {
         direction = 'd';
-        event.preventDefault();
         }
       }
       if(endy < starty - offset ){
@@ -121,7 +122,7 @@ window.addEventListener("touchend",function(event){
     function resizeCanvas() {
         canvas = document.getElementById('canvas');
         canvas_context = canvas.getContext("2d");
-        canvas.width = window.innerWidth*0.3  - 11;
+        canvas.width = window.innerWidth*0.5  - 11;
         canvas.height = window.innerHeight*0.7 - 11;
         redraw();
     }
@@ -210,7 +211,7 @@ function clearCanvas() {
     // set the canvas width to the window's inner width multiplied
     // by 0.3 to make it a little smaller since we still need some
     // screen space to draw the score board
-    canvas.width = window.innerWidth*0.3 -11;
+    canvas.width = window.innerWidth*0.5 -11;
     // set the canvas height same as above
     canvas.height = window.innerHeight*0.7 - 11;
 
