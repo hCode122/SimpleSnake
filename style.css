@@ -1,26 +1,17 @@
-#field {
-    margin-right:300px;
-    margin-top: 10px;
+#canvas {
+    margin-left: 100px;
     border-style: solid;
-    float:right;
 }
-td {
-    border-style:solid;
-    border-color: black;
-    height: 50px;
-    width: 50px;
-}
-
 #score {
-    margin-top: 10px;
+    float: right;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
     width: 400px;
     height: 300px;
-    float:left;
 }
 
 body {
+    height: 100vh;
     background-color: white;
 }
 
