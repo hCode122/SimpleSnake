@@ -41,13 +41,12 @@ p {
 /*------------------- Desktop Style --------------------------*/
 @media (min-width : 720px) {
 #canvas {
-    margin-left: 30%;
+    margin-left: 20%;
     border-style: solid;
 }
 #score {
     float: right;
     padding-top: 1%;
-    margin-right: 32%;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
     width: 35vw;
