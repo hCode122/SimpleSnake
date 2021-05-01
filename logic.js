@@ -73,11 +73,13 @@ window.addEventListener("touchend",function(event){
       var endx = event.changedTouches.item(0).clientX;
       if(endx > startx + offset){
         if (pre_direction != 'l') {
+        event.preventDefault();
         direction = 'r';
         }
       }
       if(endx < startx - offset ){
         if (pre_direction != 'r') {
+        event.preventDefault();
         direction = 'l';
         }
       }
@@ -88,11 +90,13 @@ window.addEventListener("touchend",function(event){
 
       if(endy > starty + offset){
         if (pre_direction != 'u') {
+        event.preventDefault();
         direction = 'd';
         }
       }
       if(endy < starty - offset ){
         if (pre_direction != 'd') {
+        event.preventDefault();
         direction = 'u';
         }
       }
@@ -122,8 +126,8 @@ window.addEventListener("touchend",function(event){
     function resizeCanvas() {
         canvas = document.getElementById('canvas');
         canvas_context = canvas.getContext("2d");
-        canvas.width = window.innerWidth*0.5  - 11;
-        canvas.height = window.innerHeight*0.7 - 11;
+        canvas.width = window.innerWidth*0.4  - 6;
+        canvas.height = window.innerHeight*0.5 - 5;
         redraw();
     }
     /*---------------------------------------------------------*/
@@ -211,9 +215,9 @@ function clearCanvas() {
     // set the canvas width to the window's inner width multiplied
     // by 0.3 to make it a little smaller since we still need some
     // screen space to draw the score board
-    canvas.width = window.innerWidth*0.5 -11;
+    canvas.width = window.innerWidth*0.4 -6;
     // set the canvas height same as above
-    canvas.height = window.innerHeight*0.7 - 11;
+    canvas.height = window.innerHeight*0.5 -5 ;
 
     canvas_context.fillStyle = 'white';  
     canvas_context.strokestyle = 'white';
