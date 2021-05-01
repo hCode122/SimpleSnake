@@ -8,38 +8,40 @@
 }
 #score {
     padding-top: 1%;
-    margin-left: 35%;
+    margin-left: 26%;
     background-color: rgb(42, 38, 38);
     border-radius: 20px;
-    width: 35vw;
-    height: 20vh;
+    width: 40vw;
+    height: 13vh;
 }
 
 body {
+    touch-action: none;
     height: 100vh;
     background-color: white;
 }
 
 .info_box {
-    font-size: 1vh;
+    font-size: 1.5vh;
     float: right;
-    width: 40%;
+    width: 30%;
     height: 15%;
     text-align: center;
     margin-right: 10%;
 }
 
 p {
+    float: left;
     margin-left: 10%;
     color: rgb(255, 255, 255);
-    font-size: 1vh;
+    font-size: 1.3vh;
 }
 }
 /*------------------------------------------------------------*/
 /*------------------- Desktop Style --------------------------*/
 @media (min-width : 720px) {
 #canvas {
-    margin-left: 25%;
+    margin-left: 30%;
     border-style: solid;
 }
 #score {

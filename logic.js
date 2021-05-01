@@ -126,7 +126,7 @@ window.addEventListener("touchend",function(event){
     function resizeCanvas() {
         canvas = document.getElementById('canvas');
         canvas_context = canvas.getContext("2d");
-        canvas.width = window.innerWidth*0.4  - 6;
+        canvas.width = window.innerWidth*0.4  - 5;
         canvas.height = window.innerHeight*0.5 - 5;
         redraw();
     }
@@ -215,9 +215,9 @@ function clearCanvas() {
     // set the canvas width to the window's inner width multiplied
     // by 0.3 to make it a little smaller since we still need some
     // screen space to draw the score board
-    canvas.width = window.innerWidth*0.4 -6;
+    canvas.width = window.innerWidth*0.4 +4;
     // set the canvas height same as above
-    canvas.height = window.innerHeight*0.5 -5 ;
+    canvas.height = window.innerHeight*0.5 -7;
 
     canvas_context.fillStyle = 'white';  
     canvas_context.strokestyle = 'white';
