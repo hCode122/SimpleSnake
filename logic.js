@@ -1,85 +1,56 @@
-var snake_current = ["5-5", "5-4"]; 
-
+var canvas; 
+var canvas_context; 
+var first_part = {x:135, y:60}; 
+var second_part = {x:135, y:45}
+// snake's main body
+var snake = [first_part, second_part];
+// points to the snake's first element
+var head = snake[0];
+// current direction
 var direction;
+// the direction we called the previous time
 var pre_direction;
+// stores the setInterval() variable so we can clear it later
 var running;
 var score = 0;
 var highscore;
-var speed = 700;
+// the interval of calling render()
+var speed = 300;
+// stores the position of food
+var food_pos = {x:null, y:null};
 
 function prepare() {
-    // iteratively create the cells and rows of the game field
 
-    // get the table element
-    var tbl = document.getElementById('field');
-    for (var row = 0; row < 12; ++row) {
-        // create a table row
-        var tr = document.createElement('tr');
-        for (var col = 0; col < 12; ++col) {
-            // create a table cell
-            var td = document.createElement('td');
-
-            // create a p element
-            // which is necessary so the td
-            // field would appear since it table cells
-            // doesn't render when empty&& direction != 'r'
-            var p = document.createElement('p');
-
-            // add the p element to the cell
-            td.appendChild(p);
-
-            // set the cell id to the number of the
-            // current row + "-" + the number of the
-            // current cell
-            // I added the dash to prevent two cells
-            // from having the same id since without the
-            // dash the eleventh cell in the first row and
-            // the first cell in the eleventh row would have
-            // the same id: 111 while if we added the dash their
-            // ids would be 1-11 and 11-1 which would be easier
-            // to destinguish
-            // the id would be useful later when interacting
-            // with specific cells to add items to them
-            // or change their color...etc
-            td.id = row+"-"+col;
-
-            // add the cell to the row
-            tr.appendChild(td);
-        }
-        // add the row to the table
-        tbl.appendChild(tr);
-    }
-    for (var i = 0; i < snake_current.length; ++i) {
-        var cell = document.getElementById(snake_current[i]);
-        cell.style.backgroundColor = 'black';
-    }
+    // get the canvas element
     /*--------------------------------------------------------*/
     // this event listener lisetens to input from the arrow
-    // keys and calls move() with the right values
-        document.addEventListener('keydown', function(event) {
+    // keys and sets $direction to the right value
+    document.addEventListener('keydown', function(event) {
         switch (event.key) {
             case 'ArrowUp':
                 if (pre_direction != 'd') {
-                direction = 'u';
+                    event.preventDefault();
+                    direction = 'u';
                 }
                 break;
             case 'ArrowDown':
                 if (pre_direction != 'u') {
-                direction = 'd';
+                    direction = 'd';
                 }
                 break;
             case 'ArrowLeft':
                 if (pre_direction != 'r') {
-                direction = 'l';
+                    direction = 'l';
                 }
                 break;
             case 'ArrowRight':
                 if (pre_direction != 'l') {
-                direction = 'r';
+                    direction = 'r';
                 }
                 break;
         }
-        });
+    });
+    /*-------------------------------------------------------*/
     // android swipe listener
     var startx,starty = null;
     window.addEventListener("touchstart",function(event){
@@ -93,9 +64,9 @@ function prepare() {
         }
     });
 
-    window.addEventListener("touchend",function(event){
+window.addEventListener("touchend",function(event){
     var offset = 100;//at least 100px are a swipe
-    if(startx){
+    if(startx) {
       //the only finger that hit the screen left it
       var endx = event.changedTouches.item(0).clientX;
       if(endx > startx + offset){
@@ -116,6 +87,7 @@ function prepare() {
       if(endy > starty + offset){
         if (pre_direction != 'u') {
         direction = 'd';
+        event.preventDefault();
         }
       }
       if(endy < starty - offset ){
@@ -124,94 +96,155 @@ function prepare() {
         }
       }
     }
-
     });
+    /*-------------------------------------------------------*/
+    // resize event so the canvas size keep responsive
+    window.addEventListener('resize', resizeCanvas, false);
+        // Draw canvas border for the first time.
+        resizeCanvas();
+    
+
     main();
 }
 
+    // Display custom canvas. In this case it's a black, 5 pixel 
+    // border that resizes along with the browser window.
+    function redraw() {
+        canvas_context.strokeStyle = 'black';
+        canvas_context.lineWidth = '5';
+        canvas_context.strokeRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Runs each time the DOM window resize event fires.
+    // Resets the canvas dimensions to match window,
+    // then draws the new borders accordingly.
+    function resizeCanvas() {
+        canvas = document.getElementById('canvas');
+        canvas_context = canvas.getContext("2d");
+        canvas.width = window.innerWidth*0.3  - 11;
+        canvas.height = window.innerHeight*0.7 - 11;
+        redraw();
+    }
+    /*---------------------------------------------------------*/
+
 // pops the snake's last body piece and adds a new piece in
 // the new position based on input while the snake is inside
-// the game board
-// if the snake hits the board edge this function calls quit()
+// the game's board
+// if the snake hits the board's edge this function calls quit()
 function move() {
-    var piece_location = snake_current[0].split('-');
     switch (direction) {
         case 'u':
-            if (parseInt(piece_location[0])-1 >= 0) {
-            pre_direction = direction;
-            snake_current.pop();
-            snake_current.unshift(piece_location[0]--);
+            if ((head.y)-15 >= 0) {
+                var new_head = {x:head.x, y:head.y-15};
+                snake.pop();
+                snake.unshift(new_head);
+                pre_direction = 'u';
             } else {
                 quit();
-                return;
             }
             break;
         case 'd':
-            if (parseInt(piece_location[0])+1< 12 ) {  
-            pre_direction = direction;
-            snake_current.pop();
-            snake_current.unshift(piece_location[0]++);
+            if ((head.y)+15 <= canvas.height) {
+                var new_head = {x:head.x, y:head.y+15};
+                snake.pop();
+                snake.unshift(new_head);
+                pre_direction = 'd';
             } else {
                 quit();
-                return;
             }
             break;
         case 'r':
-            if (parseInt(piece_location[1])+1 < 12 ) {
-            pre_direction = direction;
-            snake_current.pop();
-            snake_current.unshift(piece_location[1]++);
+            if ((head.x)+15 <= canvas.width) {
+                var new_head = {x:head.x+15, y:head.y};
+                snake.pop();
+                snake.unshift(new_head);          
+                pre_direction = 'r';
             } else {
                 quit();
-                return;
-            }
+            }  
             break;
         case 'l':
-            if (parseInt(piece_location[1])-1 >= 0 ) {
-            pre_direction = direction;
-            snake_current.pop();
-            snake_current.unshift(piece_location[1]--);
+            if ((head.x)-15 >= 0) {
+                var new_head = {x:head.x-15, y:head.y};
+                snake.pop();
+                snake.unshift(new_head);          
+                pre_direction = 'l';
             } else {
                 quit();
-                return;
             }
             break;
     }
-    snake_current[0] = piece_location[0] + '-' + piece_location[1];
-    for (var x = 4; x < snake_current.length; ++x) {
-        for (var y = 0; y < snake_current.length; ++y) {
-            if (x != y & snake_current[x] == snake_current[y]) {
-            quit();
-            }
-        }
+   
+    if (check_eaten()) {
+        quit();
     }
+    head = snake[0];
     get_food();
     render();
 }
 
-function render() {
-    // loop through each cell and changes its background to white to clear
-    // the screen
-    for (var x = 0; x < 12; ++x) {
-        for (var y = 0; y < 12; ++y) {
-            if (document.getElementById(x+'-'+y).style.backgroundColor != 'green') {
-                document.getElementById(x+'-'+y).style.backgroundColor = 'white';}
+// checks if the snake bit itself by seeing if 2 of the snake's pats
+// are in the same x,y position
+function check_eaten() {
+    for (var x = 4; x < snake.length; ++x) {
+        for (var y = 0; y < snake.length; ++y) {
+            if (x != y & snake[x].x == snake[y].x & snake[x].y == snake[y].y) {
+                return true;
+            }
         }
-    }
-    // display each segment of the snake's body as a black background
-    for (var i = 0; i < snake_current.length; ++i) {
-        document.getElementById(snake_current[i]).style.backgroundColor = 'black';
     }
 }
 
-// the main game function, calls move every 0.7 sec
-function main() {
-    if (sessionStorage.getItem('hscore') == null) {
-        sessionStorage.setItem('hscore', 0);
-        highscore = sessionStorage.getItem('hscore');
+function drawSnake(part) {
+    // color of the block's filling
+    canvas_context.fillStyle = this.valueOf('color');  
+    // color of the block's edge
+    canvas_context.strokeStyle = 'black';  
+    // draw the block at the snake's part's x and y position
+    // with 15 width and 15 height
+    canvas_context.strokeRect(part.x, part.y, 15, 15);   
+    canvas_context.fillRect(part.x, part.y, 15, 15);   
+}
+
+function clearCanvas() {
+    // set the canvas width to the window's inner width multiplied
+    // by 0.3 to make it a little smaller since we still need some
+    // screen space to draw the score board
+    canvas.width = window.innerWidth*0.3 -11;
+    // set the canvas height same as above
+    canvas.height = window.innerHeight*0.7 - 11;
+
+    canvas_context.fillStyle = 'white';  
+    canvas_context.strokestyle = 'white';
+    canvas_context.fillRect(0, 0, canvas.width, canvas.height);   
+}
+
+function render() {
+    // call clearCanvas to clear the screen in order to draw the updates
+    clearCanvas();
+    // the snake's color
+    var color = 'cyan';
+    // call drawSnake() to draw each one of the snake's parts
+    snake.forEach(drawSnake, color);
+
+    // if there is food on the screen, draw it
+    if (food_pos.x != null & food_pos.y != null) {
+        canvas_context.fillStyle = 'yellow';
+        canvas_context.strokestyle = 'black';
+        canvas_context.fillRect(food_pos.x, food_pos.y, 15,15);
+        canvas_context.strokeRect(food_pos.x, food_pos.y, 15,15);
     }
-    else {
-        highscore = sessionStorage.getItem('hscore');
+}
+
+// the main game function, calls move every $speed second
+function main() {
+    // if there is no saved highscore set the highscore to 0
+    // else load it
+    if (localStorage.getItem('hscore') == null) {
+        localStorage.setItem('hscore', 0);
+        highscore = localStorage.getItem('hscore');
+    } else {
+        highscore = localStorage.getItem('hscore');
     }
 
     document.getElementById('score_tb').value = score;
@@ -222,85 +255,77 @@ function main() {
 }
 
 
-// stops the script from calling move every 0.7 sec and changes the snake's
+// stops the script from calling move every $speed second and changes the snake's
 // color to red to signify that the snake have hit a wall and displays
-// you loose to the player
+// you loose to the player with the option of restarting 
 function quit() {
     clearInterval(running);
 
+    clearCanvas();
     // change the snake's color to red to signify damage
-    for (var i = 0; i < snake_current.length; ++i) {
-        document.getElementById(snake_current[i]).style.backgroundColor = 'red';
-    }
+    var color = 'red';
+    snake.forEach(drawSnake,color)
 
     var prev_highscore = highscore;
 
     // if the current score is higher than the highscore, update the highscore
     if (score > prev_highscore) {
-        sessionStorage.setItem('hscore', score);
+        localStorage.setItem('hscore', score);
         highscore = score;
     }
-
     
-
     if (confirm('You loose!\nScore = ' +score+ '    HighScore = ' +highscore+ '\n\n\n Restart?')) {
         // clear screen
-        for (var x = 0; x < 12; ++x) {
-            for (var y = 0; y < 12; ++y) {
-                document.getElementById(x+'-'+y).style.backgroundColor = 'white';}
-        }
-
+        clearCanvas();
         // reset snake_current to default location and length
-        while (snake_current.length > 0) {
-            snake_current.pop();
+        while (snake.length > 0) {
+            snake.pop();
         }
         score = 0;
         direction = '';
         pre_direction = '';
-        speed = 700;
+        speed = 300;
 
-        snake_current = ["5-5", "5-4"]; 
+        first_part = {x:135, y:60}; 
+        second_part = {x:135, y:45}
+        snake = [first_part, second_part];
+        head = snake[0];
         main();
     }
 }
 
 // responsible for deleting eaten food, increasing the snake's length and speed and adding score
 function get_food() {
-    if (document.getElementById(snake_current[0]).style.backgroundColor == 'green'){
+    if (head.x == food_pos.x & head.y == food_pos.y) {
+        food_pos.x = null;
+        food_pos.y = null;
+        snake.push(snake[snake.length-1].x+5);
         score += 10;
-
-        // we have to clear the interval and reset it so it would take to the new speed val
-        if (speed > 150) {
-        speed -= 50;
-        clearInterval(running);
-        running = setInterval(function() {move()},speed);}
-
-        // add a new piece
-        var piece_location = snake_current[snake_current.length-1].split('-');
-        if (direction == 'u') {
-            snake_current.push(piece_location[0]++ + '-' + piece_location[1]);
-        } else if (direction == 'd') {
-            snake_current.push(piece_location[0]-- + '-' + piece_location[1]);
-        } else if (direction == 'l') {
-            snake_current.push(piece_location[0] + '-' + piece_location[1]--);
-        } else if (direction == 'r') {
-            snake_current.push(piece_location[0]-- + '-' + piece_location[1]++);
-        }
         document.getElementById('score_tb').value = score;
-        create_food();}
+        if (speed > 100) {
+            speed -= 20;
+            clearInterval(running);
+            running = setInterval(function() {move()},speed);
+        }
+        create_food();
+    } 
 }
 
 // creates food in a random empty cell
 function create_food() {
-    // keep creating new positions for the food as long as the position is taken by previous food
-    // or by the snake's body
     do {
-    var new_food_pos_x = parseInt(Math.random() * 11);
-    var new_food_pos_y = parseInt(Math.random() * 11);}
-    while (document.getElementById(new_food_pos_x + '-' + new_food_pos_y).style.backgroundColor == 'black' |
-    document.getElementById(new_food_pos_x + '-' + new_food_pos_y).style.backgroundColor == 'green');
-    console.log((new_food_pos_x + " " + new_food_pos_y));
+        // we use the equation here to get a random multiple of 15 between 0 and
+        // the max width/height
+        food_pos.x = Math.round((Math.random() * (canvas.width-15) / 15)) * 15;
+        food_pos.y = Math.round((Math.random() * (canvas.height-15) / 15)) * 15;
+    } while (not_snake() == false);
+}
 
-    document.getElementById(new_food_pos_x + '-' + new_food_pos_y).style.backgroundColor = 'green';
-
+// used to check that the specific x and y position does not contain a snake body piece
+function not_snake() {
+    for (var i = 0; i < snake.length; ++i) {
+        if (snake[i].x == food_pos.x & snake[i].y == food_pos.y) {
+            return false;
+        }
+    }
 }
